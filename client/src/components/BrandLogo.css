@@ -1,0 +1,68 @@
+.brand-logo-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.brand-logo-img {
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.brand-logo--nav .brand-logo-img {
+  height: 40px;
+}
+
+.brand-logo--footer .brand-logo-img {
+  height: 48px;
+}
+
+.brand-logo--footer .brand-logo-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: #faf3e8;
+}
+
+.brand-logo--footer .brand-logo-tagline {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+}
+
+.brand-logo--hero {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.brand-logo--hero .brand-logo-img {
+  height: clamp(100px, 18vw, 140px);
+}
+
+.brand-logo--hero .brand-logo-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  color: #faf3e8;
+}
+
+.brand-logo--hero .brand-logo-tagline {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+}
+
+.brand-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  line-height: 1.2;
+}

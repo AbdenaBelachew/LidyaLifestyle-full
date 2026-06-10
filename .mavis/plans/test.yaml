@@ -1,0 +1,9 @@
+plan:
+  name: "LidyaLifestyle Backend"
+  tasks:
+    - id: backend-api
+      title: "Build Node/Express backend API"
+      prompt: "Build the complete Node.js/Express backend for LidyaLifestyle e-commerce. See workspace for full context."
+      assigned_to: coder
+      verified_by: verifier
+      verify_prompt: "Verify backend files exist."

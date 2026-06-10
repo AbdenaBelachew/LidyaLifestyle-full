@@ -1,0 +1,8 @@
+version: 1
+plan:
+  name: LidyaLifestyle Backend
+  tasks:
+    - id: backend-api
+      title: Build Node Express backend API
+      prompt: Build the complete Node.js Express backend for LidyaLifestyle e-commerce in D:/Projects/LidyaLifestyle-full/server/
+      assigned_to: coder

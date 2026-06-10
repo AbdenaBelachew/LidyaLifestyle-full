@@ -1,0 +1,267 @@
+plan:
+  name: "LidyaLifestyle Backend + Admin + Frontend"
+  tasks:
+    - id: backend-api
+      title: "Build Node/Express backend API"
+      prompt: |
+        Build the complete Node.js/Express backend for the LidyaLifestyle e-commerce project.
+        
+        WORKSPACE: D:\Projects\LidyaLifestyle-full
+        Server code goes in: D:\Projects\LidyaLifestyle-full\server\
+        
+        === DB SCHEMA (MySQL) ===
+        Use these exact table and column names:
+        
+        CREATE TABLE users (
+          id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          email VARCHAR(255) NOT NULL UNIQUE,
+          password_hash VARCHAR(255) NOT NULL,
+          role ENUM("customer","admin") NOT NULL DEFAULT "customer",
+          is_active BOOLEAN NOT NULL DEFAULT TRUE,
+          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        
+        CREATE TABLE categories (
+          id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(150) NOT NULL,
+          slug VARCHAR(150) NOT NULL UNIQUE,
+          parent_id BIGINT UNSIGNED DEFAULT NULL,
+          is_active BOOLEAN NOT NULL DEFAULT TRUE,
+          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
+        );
+        
+        CREATE TABLE products (
+          id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          slug VARCHAR(255) NOT NULL UNIQUE,
+          short_description VARCHAR(500),
+          description TEXT,
+          price DECIMAL(10,2) NOT NULL,
+          category_id BIGINT UNSIGNED DEFAULT NULL,
+          stock_qty INT UNSIGNED NOT NULL DEFAULT 0,
+          sku VARCHAR(100) UNIQUE,
+          is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+          is_active BOOLEAN NOT NULL DEFAULT TRUE,
+          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
+        );
+        
+        CREATE TABLE product_images (
+          id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          product_id BIGINT UNSIGNED NOT NULL,
+          image_path VARCHAR(500) NOT NULL,
+          is_primary BOOLEAN NOT NULL DEFAULT FALSE,
+          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+        );
+        
+        CREATE TABLE carts (
+          id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          user_id BIGINT UNSIGNED NOT NULL UNIQUE,
+          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+        
+        CREATE TABLE cart_items (
+          id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          cart_id BIGINT UNSIGNED NOT NULL,
+          product_id BIGINT UNSIGNED NOT NULL,
+          quantity INT UNSIGNED NOT NULL DEFAULT 1,
+          FOREIGN KEY (cart_id) REFERENCES carts(id) ON DELETE CASCADE,
+          FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+          UNIQUE KEY unique_cart_product(cart_id, product_id)
+        );
+        
+        CREATE TABLE orders (
+          id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          user_id BIGINT UNSIGNED NOT NULL,
+          total_amount DECIMAL(10,2) NOT NULL,
+          status ENUM("pending","paid","processing","shipped","delivered","cancelled") NOT NULL DEFAULT "pending",
+          created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        );
+        
+        CREATE TABLE order_items (
+          id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+          order_id BIGINT UNSIGNED NOT NULL,
+          product_id BIGINT UNSIGNED NOT NULL,
+          quantity INT UNSIGNED NOT NULL,
+          unit_price DECIMAL(10,2) NOT NULL,
+          FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+          FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+        );
+        
+        === REQUIREMENTS ===
+        
+        Write these files:
+        
+        1. server/package.json with: express, mysql2, bcryptjs, jsonwebtoken, multer, cors, dotenv, slugify (all as dependencies, version: latest or ^1.0.0)
+        
+        2. server/index.js - main Express entry point. Loads dotenv. Creates Express app. Middleware: cors, express.json, express.urlencoded, serve static files from server/uploads/. Mounts all routes under /api prefix. Starts server on process.env.PORT or 5000.
+        
+        3. server/config/db.js - MySQL connection pool. Exports a pool object using mysql2.createPool with config from process.env (host, user, password, database, waitForConnections: true, connectionLimit: 10). Exports a query helper function that wraps pool.execute and returns rows.
+        
+        4. server/middleware/auth.js - JWT verify middleware. Reads Authorization header, expects "Bearer <token>". Verifies with process.env.JWT_SECRET. Sets req.user = { id, email, role }. Returns 401 if missing/invalid.
+        
+        5. server/middleware/admin.js - checks req.user.role === "admin". Returns 403 if not admin. Should be used AFTER auth middleware.
+        
+        6. server/middleware/upload.js - multer config. dest: server/uploads/. limits: fileSize 5 * 1024 * 1024. fileFilter: accepts only image/* types. exports single upload middleware.
+        
+        7. server/routes/auth.js - POST /api/auth/register (email, password, first_name, last_name - all required), POST /api/auth/login (email, password). Hash password with bcryptjs 12 rounds. Sign JWT with JWT_SECRET exp in JWT_EXPIRES_IN. Response format: { success: true, data: { token, user: { id, email, role, first_name } } }.
+        
+        8. server/routes/users.js - GET /api/users/me (auth required), PUT /api/users/me (auth, update first_name, last_name, phone).
+        
+        9. server/routes/categories.js - GET /api/categories (public, returns all categories with parent_name joined), POST /api/categories (admin, requires auth+admin, name, slug, parent_id, is_active), PUT /api/categories/:id (admin), DELETE /api/categories/:id (admin, soft-delete by setting is_active=false).
+        
+        10. server/routes/products.js - GET /api/products (public, supports query: category, featured, search, page, limit). Joins category and primary image. Returns { success: true, data: { products: [...], total, page, limit } }. GET /api/products/:slug (public, single product with images array and category info). POST /api/products (admin, creates product), PUT /api/products/:id (admin, updates), DELETE /api/products/:id (admin).
+        
+        11. server/routes/productImages.js - POST /api/products/:id/images (admin, multer upload, saves image_path to product_images, sets is_primary=true if first image), DELETE /api/products/:id/images/:imageId (admin, removes image).
+        
+        12. server/routes/carts.js - GET /api/cart (auth), POST /api/cart/items (auth: { productId, quantity }, auto-creates cart if none exists for user, increments qty if product already in cart), PUT /api/cart/items/:itemId (auth, update quantity), DELETE /api/cart/items/:itemId (auth).
+        
+        13. server/routes/orders.js - GET /api/orders (auth, returns users orders with order_items joined), POST /api/orders (auth, creates order from cart: snapshot items with prices, clear cart, set status pending), GET /api/orders/:id (auth, single order with items), PUT /api/orders/:id/status (admin, update status).
+        
+        14. server/routes/admin.js - GET /api/admin/dashboard (admin): returns { totalProducts, totalOrders, ordersByStatus: [{status, count}], recentOrders: last 10 orders with user email and status }.
+        
+        15. server/.env.example: PORT=5000, DB_HOST=localhost, DB_USER=root, DB_PASSWORD=yourpassword, DB_NAME=lidya_lifestyle, JWT_SECRET=your_jwt_secret_here, JWT_EXPIRES_IN=7d, UPLOAD_DIR=uploads
+        
+        16. server/uploads/.gitkeep - empty file
+        
+        17. server/database/schema.sql - the exact SQL schema from the DB SCHEMA section above (replace existing content).
+        
+        18. server/database/seed.sql - INSERT statements for:
+          - admin user: email=admin@lidya.com, password_hash=$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/X4pR5iS6eKkqjXr7e (this is Admin@1234), role=admin
+          - 7 categories: Shop All, Pillows, Throws & Blankets, Table Linens, Bath, Wall Hangings, Fabric by the Yard (with slugs and appropriate sort_order)
+          - 5 sample products with realistic names, prices ($65-$650), descriptions, stock_qty, is_featured for an Ethiopian textile brand (use collection names like Heritage, African Coast, Omo Valley as short_description or description text)
+        
+        Design requirements:
+        - All API responses: { success: true, data: ... } or { success: false, error: "message" }
+        - Product listing: join categories and product_images, return category_name and primary_image_url
+        - Use slugify to auto-generate slugs from names (lowercase, replace spaces with hyphens)
+        - Handle duplicate slug on product/category create: append -1, -2 etc.
+        - All passwords hashed with bcryptjs (12 rounds) before storing
+        - JWT payload: { id, email, role }
+        
+        After writing all files, run: cd D:\Projects\LidyaLifestyle-full\server && npm install --silent && echo "INSTALL_OK"
+      assigned_to: coder
+      verified_by: verifier
+      verify_prompt: |
+        Read all 18 listed files and confirm they exist. Verify server/index.js imports and uses all route files under /api. Verify server/middleware/auth.js reads Bearer token and sets req.user. Verify server/middleware/admin.js checks req.user.role. Verify server/config/db.js uses mysql2 pool. Verify multer is configured in server/middleware/upload.js. Verify all route files (auth, users, categories, products, productImages, carts, orders, admin) exist. Run the npm install command and confirm it completes without errors.
+
+    - id: admin-panel
+      title: "Build React Admin Panel"
+      prompt: |
+        Build the admin panel UI for LidyaLifestyle e-commerce.
+        
+        WORKSPACE: D:\Projects\LidyaLifestyle-full
+        Client code in: D:\Projects\LidyaLifestyle-full\client\
+        
+        === EXISTING CONTEXT ===
+        - React 19 + Vite client at D:\Projects\LidyaLifestyle-full\client\
+        - Existing: src/App.jsx, src/components/ (Navbar, Hero, Footer etc.), package.json with react, react-dom
+        - Backend at http://localhost:5000
+        - JWT stored in localStorage as "lidya_token"
+        - All authenticated requests include: Authorization: Bearer <token>
+        
+        === REQUIREMENTS ===
+        
+        Write these files:
+        
+        1. Update client/package.json - add "react-router-dom" and "axios" to dependencies if not already present.
+        
+        2. client/src/admin/App.jsx - Admin root component. Uses useEffect to check localStorage for "lidya_token". If token missing, redirects to /admin/login using useNavigate. Wraps children in AdminLayout.
+        
+        3. client/src/admin/pages/Login.jsx - Login page component. Email + password form. Calls POST /api/auth/login via axios (use api.js). On success stores token as "lidya_token" and navigates to /admin/dashboard. Shows inline error on failure. Clean centered card design with LidyaLifestyle branding colors.
+        
+        4. client/src/admin/pages/Dashboard.jsx - Dashboard. Fetches GET /api/admin/dashboard on mount. Shows 4 stat cards (Total Products, Total Orders, Recent Orders table with last 5 orders: ID, email, total, status badge, date), and orders by status summary. Loading state.
+        
+        5. client/src/admin/pages/Products.jsx - Product management. Fetches all products (GET /api/products with large limit). Table columns: Name, Price, Stock, Featured (yes/no), Active (yes/no), Actions. "Add Product" button opens create modal. Edit button opens same modal pre-filled. Modal form fields: name (slug auto-generated from name using slugify), short_description, description, price (number), category_id (select from categories), stock_qty (number), sku, is_featured (checkbox), is_active (checkbox). Save calls POST /api/products (create) or PUT /api/products/:id (edit). Includes image upload section in the same modal: shows existing images, upload button (POST /api/products/:id/images), delete image button (DELETE /api/products/:id/images/:imageId), set primary toggle.
+        
+        6. client/src/admin/pages/Categories.jsx - Category management. Fetches GET /api/categories. Table: Name, Slug, Parent, Active, Actions. Add/Edit modal with: name, slug (auto from name), parent_id (select from other categories, or null for top-level), is_active (checkbox). Delete button with confirmation. Visual hierarchy (indent child categories).
+        
+        7. client/src/admin/pages/Orders.jsx - Order management. Fetches GET /api/orders. Table: Order ID, Customer email, Total, Status (color-coded badge), Date, Actions. Click row or expand button to show order items (product name, qty, unit price). Status dropdown to update order status (PUT /api/orders/:id/status). Status options: pending, paid, processing, shipped, delivered, cancelled.
+        
+        8. client/src/admin/components/AdminSidebar.jsx - Sidebar navigation. Links: Dashboard, Products, Categories, Orders. Logout button at bottom clears "lidya_token" and navigates to /admin/login. Active link highlighted.
+        
+        9. client/src/admin/components/AdminLayout.jsx - Layout wrapper. Renders AdminSidebar on the left (240px wide), main content area on right. Sidebar collapses to hamburger on screens < 768px.
+        
+        10. client/src/admin/api.js - axios instance. baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000". Request interceptor adds Authorization header from localStorage.lidya_token. Response interceptor: if response status === 401, clear localStorage, redirect to /admin/login.
+        
+        11. Update client/src/App.jsx - Add React Router (BrowserRouter, Routes, Route). Add these routes: /admin/login (Login page, no auth), /admin (redirect to /admin/dashboard), /admin/dashboard, /admin/products, /admin/categories, /admin/orders (all require admin auth via Admin component). IMPORTANT: Keep the existing homepage (Hero, Navbar, Footer etc.) accessible at / and other homepage routes. Do not remove existing component imports and rendering.
+        
+        12. client/.env with: VITE_API_URL=http://localhost:5000
+        
+        13. client/src/admin/admin.css - all admin panel styles. Clean white/gray background, warm amber primary color (#C8873A or similar earth tone), card shadows, table hover styles, modal overlay and centered card, responsive sidebar, badge colors for order statuses, toast notifications.
+        
+        Design requirements:
+        - Clean minimal admin UI. No external UI libraries. Pure CSS.
+        - Tables with hover row highlight, centered action buttons.
+        - Modals: dark overlay, centered white card, close button.
+        - Toast notifications: simple setTimeout-based, appear top-right.
+        - Responsive: sidebar collapses on mobile, tables scroll horizontally.
+        
+        After writing all files, verify the app builds:
+        cd D:\Projects\LidyaLifestyle-full\client && npm install react-router-dom axios --silent 2>$null; if ($LASTEXITCODE -ne 0) { npm install react-router-dom axios }; npm run build
+      assigned_to: coder
+      verified_by: verifier
+      verify_prompt: |
+        Read all 13 listed files and confirm they exist. Verify App.jsx has /admin/* routes registered with React Router v6 and keeps existing homepage routes. Verify Login.jsx stores JWT as "lidya_token" in localStorage and redirects to /admin/dashboard on success. Verify admin/api.js has axios request interceptor adding Authorization header and 401 response interceptor redirecting to login. Verify Products.jsx has create/edit modal with all fields. Verify Orders.jsx has status update dropdown. Run "npm run build" in the client directory and confirm exit code 0.
+
+    - id: frontend-pages
+      title: "Build Frontend Product Pages"
+      prompt: |
+        Build the customer-facing product catalog, product detail, and cart pages for LidyaLifestyle.
+        
+        WORKSPACE: D:\Projects\LidyaLifestyle-full
+        Client code in: D:\Projects\LidyaLifestyle-full\client\
+        
+        === EXISTING CONTEXT ===
+        - React 19 + Vite, existing components: Navbar, Hero, Footer, Story, Heritage, Collection, Featured, Process, Testimonial, Newsletter
+        - Existing style files: src/index.css, src/App.css, src/components/*.css, modern.css
+        - Guest cart in localStorage key "lidya_cart": [{productId, quantity}]
+        - Backend at http://localhost:5000
+        
+        === REQUIREMENTS ===
+        
+        Write these files:
+        
+        1. client/src/pages/Shop.jsx - Shop/catalog page at /shop route. Fetches GET /api/products with query params (category, search, featured, page, limit=12). Layout: top search bar + category filter tabs (horizontal scrollable). Main area: ProductGrid with products. Shows product count ("Showing X products"). Featured badge on featured items. Loading skeleton while fetching. Empty state when no results. Category filter: clicking a category updates the query param and refetches.
+        
+        2. client/src/pages/ProductDetail.jsx - Product detail page at /product/:slug route. Fetches GET /api/products/:slug. Layout: two-column (desktop) / stacked (mobile). Left: main product image large + thumbnail strip if multiple images. Right: product info (name as h1, price in large text, compare_price struck-through in red if present, short_description, full description, materials/dimensions if available, stock badge (In Stock=green, Low Stock=orange, Out of Stock=red), quantity selector with +/- buttons (range 1-10), "Add to Cart" button (disabled if out of stock). "Add to Cart" updates localStorage lidya_cart. Breadcrumb: Home > Shop > Product Name. useEffect to scroll to top on mount.
+        
+        3. client/src/pages/Cart.jsx - Cart page at /cart route. Reads from localStorage lidya_cart. For each item, displays: small product image (fetch product by id/slug), name, unit price, quantity +/- buttons, line total, X remove button. Running subtotal at bottom. "Continue Shopping" -> /shop. "Checkout" button -> alert("Checkout coming soon"). Empty cart state: emoji or SVG icon, "Your cart is empty", "Start Shopping" button -> /shop.
+        
+        4. client/src/components/ProductCard.jsx - Reusable product card. Props: product object. Shows: product image (link to /product/:slug), product name (link), price, compare_price struck-through if present, "Featured" badge if is_featured, small "Add to Cart" icon button that updates lidya_cart. Card hover: subtle lift shadow. Image aspect ratio 1:1.
+        
+        5. client/src/components/ProductGrid.jsx - Reusable grid. Props: products (array), loading (boolean), emptyMessage (string). Renders: 6 skeleton cards (animated gray boxes) if loading, emptyMessage div if products empty, otherwise maps products to ProductCard in a CSS grid (3 cols desktop, 2 tablet, 1 mobile).
+        
+        6. client/src/components/CartIcon.jsx - Navbar cart icon. Reads item count from localStorage lidya_cart (count total quantities). Shows red badge with count. Navigates to /cart on click. Uses useEffect with storage event listener to update count reactively when cart changes.
+        
+        7. Update client/src/components/Navbar.jsx - Import and add CartIcon to the navbar (after the logo and before or after nav links). Ensure the cart icon is visible.
+        
+        8. Update client/src/App.jsx - Add React Router routes: /shop (Shop page), /product/:slug (ProductDetail page), /cart (Cart page), /category/:slug (CategoryPage). These pages use Navbar + Footer but not the homepage sections. The homepage at / still shows Hero, TaglineBar, Story, Heritage, Collection, Featured, Process, Testimonial, Newsletter. The /shop and /cart pages are full-page layouts. Make sure Navbar is shown on all pages.
+        
+        9. client/src/pages/CategoryPage.jsx - Page at /category/:slug. Gets category name from the slug param. Fetches GET /api/products?category=<slug>. Shows category name as heading. Reuses ProductGrid component. "Shop > Category Name" breadcrumb.
+        
+        10. client/src/api.js - axios instance for customer-facing API calls. baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000". Methods: getProducts(params), getProduct(slug), getCategories(). No auth required for these calls.
+        
+        11. client/src/utils/cart.js - Cart utility functions: getCart() returns lidya_cart array, setCart(cart) saves to localStorage, addToCart(productId, quantity) adds item or increments quantity if exists, removeFromCart(productId) removes, clearCart() clears, getCartCount() returns total item count. All read/write localStorage key "lidya_cart".
+        
+        12. client/src/pages/Checkout.jsx - Simple checkout page at /checkout route. Reads from localStorage lidya_cart. Shows order summary (items, subtotal). Has a "Place Order" button that calls POST /api/orders (requires auth, so show "Please log in to checkout" message if no lidya_token). On success, clear cart and show success message with order number. This is a placeholder for now - keep it simple.
+        
+        Design requirements:
+        - Warm, artisanal aesthetic matching the existing site. Earth tones, serif headings, clean sans-serif body text.
+        - Product images on clean white/light backgrounds.
+        - Smooth hover transitions on product cards.
+        - Loading skeleton states (animated pulse gray boxes).
+        - Consistent with existing Navbar, Footer styling.
+        - No external UI libraries. Custom CSS only.
+        - Responsive: grid adapts from 3 -> 2 -> 1 column.
+        
+        After writing all files, verify the app builds:
+        cd D:\Projects\LidyaLifestyle-full\client && npm run build
+      assigned_to: coder
+      verified_by: verifier
+      verify_prompt: |
+        Read all 12 listed files and confirm they exist. Verify Shop.jsx fetches GET /api/products. Verify Cart.jsx reads/writes localStorage key "lidya_cart". Verify ProductDetail.jsx handles out-of-stock (disabled add to cart) and shows stock badges. Verify App.jsx has routes for /shop, /product/:slug, /cart, /category/:slug. Verify utils/cart.js has getCart, setCart, addToCart, removeFromCart, getCartCount. Verify CartIcon.jsx reads from localStorage. Run "npm run build" in the client directory and confirm exit code 0.

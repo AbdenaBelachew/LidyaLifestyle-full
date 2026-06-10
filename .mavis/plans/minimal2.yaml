@@ -1,0 +1,8 @@
+version: 1
+plan:
+  name: test plan
+  tasks:
+    - id: t1
+      title: test task
+      prompt: do nothing
+      assigned_to: general

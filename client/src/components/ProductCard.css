@@ -1,0 +1,142 @@
+.product-card {
+  position: relative;
+  background: #fff;
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid var(--border, #e8e4df);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.product-card:hover {
+  box-shadow: 0 12px 32px rgba(44, 44, 44, 0.1);
+  transform: translateY(-4px);
+}
+
+.product-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.product-card-image {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--warm-white, #f8f6f3);
+  overflow: hidden;
+}
+
+.product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-card-image img {
+  transform: scale(1.04);
+}
+
+.product-card-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f0ebe4, #e0d5c8);
+}
+
+.product-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--brand, #c9a870);
+  color: #fff;
+  border-radius: 2px;
+}
+
+.product-badge-sold {
+  background: #6b6560;
+  left: auto;
+  right: 0.75rem;
+}
+
+.product-card-body {
+  padding: 1rem 1rem 1.25rem;
+}
+
+.product-card-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0 0.4rem;
+  color: var(--charcoal, #2c2c2c);
+}
+
+.product-card-prices {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.product-card-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--brand, #c9a870);
+}
+
+.product-card-compare {
+  font-size: 0.85rem;
+  color: #c0392b;
+  text-decoration: line-through;
+}
+
+.product-card-cart {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--charcoal, #2c2c2c);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.product-card:hover .product-card-cart {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.product-card-cart:hover:not(:disabled) {
+  background: var(--brand, #c9a870);
+  color: #fff;
+}
+
+.product-card-cart.added {
+  opacity: 1;
+  transform: translateY(0);
+  background: #27ae60;
+  color: #fff;
+}
+
+.product-card-cart:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .product-card-cart {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

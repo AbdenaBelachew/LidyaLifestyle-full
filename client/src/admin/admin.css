@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
 /* ============================================================
    DESIGN TOKENS
@@ -88,22 +89,56 @@
 }
 
 .admin-sidebar-brand {
-  padding: 1.75rem 1.5rem 1.25rem;
-  border-bottom: 1px solid var(--aborder);
+  padding: 1.5rem 1.25rem;
+  background: linear-gradient(135deg, rgba(212, 168, 90, 0.05) 0%, rgba(212, 168, 90, 0.02) 100%);
+  border-bottom: 1px solid rgba(212, 168, 90, 0.15);
   position: relative;
+  text-align: center;
+}
+
+.admin-sidebar-brand::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 90, 0.3), transparent);
+}
+
+.admin-sidebar-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.6rem;
 }
 
 .admin-sidebar-logo .brand-logo-img {
-  filter: brightness(1.2) drop-shadow(0 0 8px rgba(212, 168, 90, 0.3));
+  height: 32px;
+  filter: brightness(1.15) drop-shadow(0 2px 6px rgba(212, 168, 90, 0.25));
+  transition: transform 0.3s ease;
+}
+
+.admin-sidebar-logo:hover .brand-logo-img {
+  transform: scale(1.05);
 }
 
 .admin-brand-sub {
   display: block;
-  font-size: 0.65rem;
-  color: var(--amuted);
+  font-size: 0.6rem;
+  color: #d4a85a;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-top: 0.35rem;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+.admin-brand-name {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1d26;
+  letter-spacing: 0.02em;
+  margin-top: 0.4rem;
 }
 
 .admin-nav {
@@ -118,80 +153,220 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.9rem;
   color: var(--amuted);
   text-decoration: none;
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
-.admin-nav-link svg {
-  flex-shrink: 0;
-  transition: transform 0.2s;
-}
-
-.admin-nav-link:hover {
-  background: rgba(212, 168, 90, 0.08);
-  color: var(--ap2);
-}
-
-.admin-nav-link:hover svg {
-  transform: scale(1.1);
-}
-
-.admin-nav-link.active {
-  background: linear-gradient(135deg, rgba(212, 168, 90, 0.18) 0%, rgba(212, 168, 90, 0.06) 100%);
-  color: var(--ap);
-  border: 1px solid rgba(212, 168, 90, 0.2);
-}
-
-.admin-nav-link.active::before {
+.admin-nav-link::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 0;
+  bottom: 0;
   width: 3px;
-  height: 60%;
+  background: transparent;
+  transition: all 0.25s ease;
+}
+
+.admin-nav-link:hover {
+  background: rgba(212, 168, 90, 0.1);
+  color: var(--ap);
+  padding-left: 1.1rem;
+}
+
+.admin-nav-link:hover::before {
   background: var(--ap);
-  border-radius: 0 2px 2px 0;
+}
+
+.admin-nav-link:hover svg {
+  transform: scale(1.15) translateX(2px);
+}
+
+.admin-nav-link.active {
+  background: linear-gradient(135deg, rgba(212, 168, 90, 0.15) 0%, rgba(212, 168, 90, 0.05) 100%);
+  color: var(--ap);
+  border-left: 3px solid var(--ap);
+  padding-left: calc(0.9rem - 3px);
+}
+
+.admin-nav-link.active::before {
+  background: transparent;
+}
+
+.admin-nav-link svg {
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .admin-nav-section {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--amuted);
-  padding: 0.75rem 1rem 0.25rem;
-  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: rgba(212, 168, 90, 0.6);
+  padding: 0.9rem 1rem 0.4rem;
+  font-weight: 700;
 }
 
 .admin-logout {
   margin: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: transparent;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #f87171;
+  padding: 0.7rem 1rem;
+  background: linear-gradient(135deg, rgba(212, 168, 90, 0.08) 0%, rgba(212, 168, 90, 0.02) 100%);
+  border: 1.5px solid rgba(212, 168, 90, 0.2);
+  color: var(--ap);
   cursor: pointer;
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s;
+  gap: 0.6rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: inherit;
   justify-content: center;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .admin-logout:hover {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: #ef4444;
-  color: #ef4444;
+  background: linear-gradient(135deg, rgba(212, 168, 90, 0.15) 0%, rgba(212, 168, 90, 0.08) 100%);
+  border-color: var(--ap);
+  color: var(--ap);
+  box-shadow: 0 4px 12px rgba(212, 168, 90, 0.2);
+  transform: translateY(-1px);
+}
+
+.admin-logout svg {
+  transition: transform 0.25s ease;
+}
+
+.admin-logout:hover svg {
+  transform: translateX(-2px);
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.admin-navbar {
+  background: linear-gradient(135deg, var(--acard) 0%, rgba(212, 168, 90, 0.02) 100%);
+  border-bottom: 1px solid var(--aborder);
+  padding: 1.25rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+}
+
+.admin-navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  max-width: 100%;
+}
+
+.admin-navbar-left {
+  flex: 1;
+}
+
+.admin-navbar-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--atext);
+  margin: 0 0 0.25rem;
+  letter-spacing: 0.02em;
+}
+
+.admin-navbar-subtitle {
+  font-size: 0.85rem;
+  color: var(--amuted);
+  margin: 0;
+}
+
+.admin-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-navbar-search {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(212, 168, 90, 0.05);
+  border: 1px solid rgba(212, 168, 90, 0.2);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  transition: all 0.25s ease;
+}
+
+.admin-navbar-search:focus-within {
+  background: rgba(212, 168, 90, 0.08);
+  border-color: var(--ap);
+  box-shadow: 0 0 0 3px rgba(212, 168, 90, 0.1);
+}
+
+.admin-navbar-search svg {
+  color: var(--amuted);
+  flex-shrink: 0;
+}
+
+.admin-navbar-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.85rem;
+  color: var(--atext);
+  width: 150px;
+  font-family: inherit;
+}
+
+.admin-navbar-search-input::placeholder {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.admin-navbar-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 168, 90, 0.08);
+  border: 1px solid rgba(212, 168, 90, 0.2);
+  border-radius: 8px;
+  color: var(--atext);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.admin-navbar-btn:hover {
+  background: rgba(212, 168, 90, 0.15);
+  border-color: var(--ap);
+  color: var(--ap);
+}
+
+.admin-navbar-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--acard);
 }
 
 /* ============================================================
@@ -200,9 +375,11 @@
 .admin-main {
   margin-left: var(--sidebar-w);
   flex: 1;
-  padding: 2rem 2.25rem;
+  padding: 0;
   min-width: 0;
   max-width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .admin-hamburger {
@@ -236,6 +413,12 @@
 /* ============================================================
    PAGE HEADER
    ============================================================ */
+.admin-page-content {
+  flex: 1;
+  padding: 2rem 2.25rem;
+  overflow-y: auto;
+}
+
 .admin-page {
   animation: adminFadeIn 0.35s ease;
 }

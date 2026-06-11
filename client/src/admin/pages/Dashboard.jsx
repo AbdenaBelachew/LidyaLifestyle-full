@@ -43,12 +43,7 @@ export default function Dashboard() {
 
   return (
     <div className="admin-page">
-      <div style={{ marginBottom: '2rem' }}>
-        <h1 className="admin-page-title">Dashboard</h1>
-        <p className="admin-page-subtitle">
-          Welcome back! Here's what's happening with your store.
-        </p>
-      </div>
+      
 
       {/* Stat Cards */}
       <div className="admin-stats">
@@ -98,24 +93,7 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Order status breakdown */}
-      {(data.ordersByStatus || []).length > 0 && (
-        <div className="admin-card" style={{ marginBottom: '1.5rem' }}>
-          <div className="admin-card-header">
-            <h3 className="admin-card-title">Order Status Breakdown</h3>
-          </div>
-          <div className="admin-card-body">
-            <div className="admin-status-summary">
-              {(data.ordersByStatus || []).map((s) => (
-                <span key={s.status} className="admin-status-chip">
-                  <span className={`admin-badge admin-badge-${s.status}`} style={{ marginRight: 6 }}>{s.status}</span>
-                  {s.count}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+    
 
       {/* Recent Orders Table */}
       <div className="admin-card">

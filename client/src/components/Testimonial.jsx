@@ -9,7 +9,7 @@ const TESTIMONIALS = [
   },
   {
     quote: 'Finally, home décor with a story. The Omo Valley throw is the centerpiece of our bedroom — we get compliments every single day.',
-    author: 'James & Amara K.',
+    author: 'James & John K.',
     location: 'London, UK',
   },
 ];

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar';
+import AdminNavbar from './AdminNavbar';
 import '../admin.css';
 
 const PAGE_TITLES = {
@@ -35,7 +36,10 @@ export default function AdminLayout({ children }) {
       <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <main className="admin-main">
-        {children}
+        <AdminNavbar />
+        <div className="admin-page-content">
+          {children}
+        </div>
       </main>
     </div>
   );

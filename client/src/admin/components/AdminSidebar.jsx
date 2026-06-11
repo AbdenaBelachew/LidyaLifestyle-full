@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import BrandLogo, { BRAND_TAGLINE } from '../../components/BrandLogo';
+import BrandLogo, { BRAND_TAGLINE, BRAND_NAME } from '../../components/BrandLogo';
 
 const LINKS = [
   {
@@ -58,10 +58,25 @@ export default function AdminSidebar({ open, onClose }) {
     <aside className={`admin-sidebar ${open ? 'open' : ''}`}>
       <div className="admin-sidebar-brand">
         <BrandLogo variant="mark" asLink={false} className="admin-sidebar-logo" />
+        <div className="admin-brand-name">{BRAND_NAME}</div>
         <span className="admin-brand-sub">{BRAND_TAGLINE}</span>
       </div>
 
       <nav className="admin-nav">
+        <a
+          href="/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="admin-nav-link admin-home-link"
+          onClick={onClose}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 10.5L12 4l9 6.5"/>
+            <path d="M9 21V12h6v9"/>
+            <path d="M21 21H3"/>
+          </svg>
+          Go to Home
+        </a>
         <div className="admin-nav-section">Main Menu</div>
         {LINKS.map((link) => (
           <NavLink

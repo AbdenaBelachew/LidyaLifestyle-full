@@ -93,6 +93,7 @@ export default function Products() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
   const [images, setImages] = useState([]);
+  const [newFiles, setNewFiles] = useState([]);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
@@ -161,8 +162,27 @@ export default function Products() {
         await api.put(`/api/products/${editing.id}`, payload);
         showToast('Product updated successfully');
       } else {
-        await api.post('/api/products', payload);
+        const res = await api.post('/api/products', payload);
+        const created = res.data?.data;
         showToast('Product created successfully');
+
+        // If user selected images while creating, upload them now
+        if (newFiles && newFiles.length > 0 && created && created.id) {
+          setUploading(true);
+          try {
+            for (const file of newFiles) {
+              const fd = new FormData();
+              fd.append('image', file);
+              await api.post(`/api/products/${created.id}/images`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+            }
+            showToast('Images uploaded');
+          } catch (err) {
+            showToast('One or more image uploads failed', 'error');
+          } finally {
+            setUploading(false);
+            setNewFiles([]);
+          }
+        }
       }
       setModalOpen(false);
       loadProducts();
@@ -188,6 +208,11 @@ export default function Products() {
       setUploading(false);
       e.target.value = '';
     }
+  };
+
+  const handleNewFilesChange = (e) => {
+    const files = e.target.files ? Array.from(e.target.files) : [];
+    setNewFiles(files);
   };
 
   const handleDeleteImage = async (imageId) => {
@@ -240,10 +265,7 @@ export default function Products() {
   return (
     <div className="admin-page">
       <div className="admin-page-header">
-        <div>
-          <h1 className="admin-page-title">Products</h1>
-          <p className="admin-page-subtitle">{products.length} products in your catalog</p>
-        </div>
+       
         <button type="button" className="admin-btn-primary" onClick={openCreate}>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Add Product
@@ -465,7 +487,7 @@ export default function Products() {
                       checked={form.is_featured}
                       onChange={(e) => setForm((f) => ({ ...f, is_featured: e.target.checked }))}
                     />
-                    ⭐ Featured Product
+                    Featured Product
                   </label>
                   <label className="admin-check-label">
                     <input
@@ -473,7 +495,7 @@ export default function Products() {
                       checked={form.is_active}
                       onChange={(e) => setForm((f) => ({ ...f, is_active: e.target.checked }))}
                     />
-                    ✓ Active (visible in store)
+                    Active (visible in store)
                   </label>
                 </div>
 
@@ -517,9 +539,34 @@ export default function Products() {
                 )}
 
                 {!editing && (
-                  <p style={{ fontSize: '0.78rem', color: 'var(--amuted)', margin: '0.5rem 0' }}>
-                    💡 You can add images after saving the product by editing it.
-                  </p>
+                  <>
+                    <div className="admin-form-divider" />
+                    <div className="admin-form-section-title">Product Images</div>
+                    <div className="admin-images-section">
+                      <div className="admin-upload-zone">
+                        <input type="file" accept="image/*" onChange={handleNewFilesChange} disabled={uploading} multiple />
+                        <div className="admin-upload-zone-icon">
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                          </svg>
+                        </div>
+                        <p>{uploading ? 'Uploading…' : <><strong>Click to select</strong> or drag & drop</>}</p>
+                        <p style={{ fontSize: '0.75rem', marginTop: '0.25rem', opacity: 0.6 }}>PNG, JPG, WEBP up to 10MB — you can add images now and they will be uploaded after creating the product</p>
+                      </div>
+
+                      {newFiles.length > 0 && (
+                        <div style={{ marginTop: '0.75rem' }}>
+                          <strong>Selected files:</strong>
+                          <ul style={{ margin: '0.5rem 0 0 1rem', padding: 0 }}>
+                            {newFiles.map((f, i) => (
+                              <li key={i} style={{ listStyle: 'disc', marginLeft: '0.75rem', fontSize: '0.9rem' }}>{f.name}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </>
                 )}
 
                 <div className="admin-form-actions">

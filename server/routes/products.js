@@ -25,7 +25,7 @@ function buildProductSelect() {
   return `
     SELECT
       p.id, p.name, p.slug, p.short_description, p.description,
-      p.price, p.category_id, p.stock_qty, p.sku,
+      p.price, p.category_id, p.stock_qty, p.sku, p.status,
       p.is_featured, p.is_active, p.created_at,
       c.name AS category_name,
       (SELECT image_path FROM product_images WHERE product_id = p.id AND is_primary = TRUE LIMIT 1) AS primary_image,
@@ -39,7 +39,7 @@ function buildProductSelect() {
 // GET /api/products (public)
 router.get("/", async (req, res) => {
   try {
-    const { category, featured, search, page = 1, limit = 12 } = req.query;
+    const { category, featured, search, status, page = 1, limit = 10 } = req.query;
     const offset = (parseInt(page) - 1) * parseInt(limit);
 
     let where = isAdminRequest(req) ? [] : ["p.is_active = TRUE"];
@@ -56,6 +56,10 @@ router.get("/", async (req, res) => {
     }
     if (featured === "true") {
       where.push("p.is_featured = TRUE");
+    }
+    if (status) {
+      where.push("p.status = ?");
+      params.push(status);
     }
     if (search) {
       const term = `%${search}%`;
@@ -106,7 +110,7 @@ router.get("/:slug", async (req, res) => {
 // POST /api/products (admin)
 router.post("/", verify, requireAdmin, async (req, res) => {
   try {
-    const { name, slug, short_description, description, price, category_id, stock_qty, sku, is_featured, is_active } = req.body;
+    const { name, slug, short_description, description, price, category_id, stock_qty, sku, status, is_featured, is_active } = req.body;
     if (!name || price === undefined) {
       return res.status(400).json({ success: false, error: "Name and price are required" });
     }
@@ -120,9 +124,9 @@ router.post("/", verify, requireAdmin, async (req, res) => {
     }
 
     const result = await query(
-      `INSERT INTO products (name, slug, short_description, description, price, category_id, stock_qty, sku, is_featured, is_active)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, finalSlug, short_description || null, description || null, price, category_id || null, stock_qty || 0, sku || null, is_featured === true, is_active !== false]
+      `INSERT INTO products (name, slug, short_description, description, price, category_id, stock_qty, sku, status, is_featured, is_active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, finalSlug, short_description || null, description || null, price, category_id || null, stock_qty || 0, sku || null, status || 'Instock', is_featured === true, is_active !== false]
     );
 
     const products = await query(`${buildProductSelect()} WHERE p.id = ?`, [result.insertId]);
@@ -135,7 +139,7 @@ router.post("/", verify, requireAdmin, async (req, res) => {
 // PUT /api/products/:id (admin)
 router.put("/:id", verify, requireAdmin, async (req, res) => {
   try {
-    const { name, slug, short_description, description, price, category_id, stock_qty, sku, is_featured, is_active } = req.body;
+    const { name, slug, short_description, description, price, category_id, stock_qty, sku, status, is_featured, is_active } = req.body;
     if (!name || price === undefined) {
       return res.status(400).json({ success: false, error: "Name and price are required" });
     }
@@ -149,8 +153,8 @@ router.put("/:id", verify, requireAdmin, async (req, res) => {
     }
 
     await query(
-      `UPDATE products SET name=?, slug=?, short_description=?, description=?, price=?, category_id=?, stock_qty=?, sku=?, is_featured=?, is_active=? WHERE id=?`,
-      [name, finalSlug, short_description || null, description || null, price, category_id || null, stock_qty || 0, sku || null, is_featured === true, is_active !== false, req.params.id]
+      `UPDATE products SET name=?, slug=?, short_description=?, description=?, price=?, category_id=?, stock_qty=?, sku=?, status=?, is_featured=?, is_active=? WHERE id=?`,
+      [name, finalSlug, short_description || null, description || null, price, category_id || null, stock_qty || 0, sku || null, status || 'Instock', is_featured === true, is_active !== false, req.params.id]
     );
 
     const products = await query(`${buildProductSelect()} WHERE p.id = ?`, [req.params.id]);

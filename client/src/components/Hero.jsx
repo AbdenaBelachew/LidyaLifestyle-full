@@ -44,14 +44,14 @@ function WovenPattern() {
     <svg className="hero-woven-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <pattern id="woven" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
-          <line x1="0" y1="6" x2="12" y2="6" stroke="rgba(201,168,112,0.035)" strokeWidth="0.5"/>
-          <line x1="6" y1="0" x2="6" y2="12" stroke="rgba(201,168,112,0.025)" strokeWidth="0.5"/>
+          <line x1="0" y1="6" x2="12" y2="6" stroke="rgba(201,168,112,0.035)" strokeWidth="0.5" />
+          <line x1="6" y1="0" x2="6" y2="12" stroke="rgba(201,168,112,0.025)" strokeWidth="0.5" />
           <rect x="5" y="5" width="2" height="2" fill="rgba(201,168,112,0.02)" />
         </pattern>
         <pattern id="woven2" x="0" y="0" width="48" height="48" patternUnits="userSpaceOnUse">
-          <rect x="0" y="0" width="48" height="48" fill="url(#woven)"/>
-          <line x1="0" y1="0" x2="48" y2="48" stroke="rgba(201,168,112,0.012)" strokeWidth="0.5"/>
-          <line x1="48" y1="0" x2="0" y2="48" stroke="rgba(201,168,112,0.012)" strokeWidth="0.5"/>
+          <rect x="0" y="0" width="48" height="48" fill="url(#woven)" />
+          <line x1="0" y1="0" x2="48" y2="48" stroke="rgba(201,168,112,0.012)" strokeWidth="0.5" />
+          <line x1="48" y1="0" x2="0" y2="48" stroke="rgba(201,168,112,0.012)" strokeWidth="0.5" />
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill="url(#woven2)" />
@@ -96,8 +96,10 @@ export default function Hero() {
     return () => clearTimeout(t);
   }, []);
 
-  // Parallax scroll — 3 depth layers
+  // Parallax scroll — desktop/tablet only
   useEffect(() => {
+    if (window.matchMedia('(max-width: 768px)').matches) return;
+
     let ticking = false;
     const onScroll = () => {
       if (!ticking) {
@@ -168,8 +170,9 @@ export default function Hero() {
     return () => obs.disconnect();
   }, []);
 
-  // Ambient mouse parallax (subtle)
+  // Ambient mouse parallax — desktop only
   const handleMouseMove = (e) => {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
     const { innerWidth: w, innerHeight: h } = window;
     setMousePos({ x: (e.clientX / w - 0.5) * 2, y: (e.clientY / h - 0.5) * 2 });
   };
@@ -267,11 +270,11 @@ export default function Hero() {
           {/* Ornamental divider */}
           <div className="hero-ornament" aria-hidden="true">
             <svg width="120" height="14" viewBox="0 0 120 14" fill="none">
-              <line x1="0" y1="7" x2="44" y2="7" stroke="rgba(201,168,112,0.4)" strokeWidth="0.75"/>
-              <path d="M50 7 L54 3 L58 7 L54 11Z" fill="none" stroke="rgba(201,168,112,0.6)" strokeWidth="0.75"/>
-              <circle cx="60" cy="7" r="1.5" fill="rgba(201,168,112,0.8)"/>
-              <path d="M62 7 L66 3 L70 7 L66 11Z" fill="none" stroke="rgba(201,168,112,0.6)" strokeWidth="0.75"/>
-              <line x1="76" y1="7" x2="120" y2="7" stroke="rgba(201,168,112,0.4)" strokeWidth="0.75"/>
+              <line x1="0" y1="7" x2="44" y2="7" stroke="rgba(201,168,112,0.4)" strokeWidth="0.75" />
+              <path d="M50 7 L54 3 L58 7 L54 11Z" fill="none" stroke="rgba(201,168,112,0.6)" strokeWidth="0.75" />
+              <circle cx="60" cy="7" r="1.5" fill="rgba(201,168,112,0.8)" />
+              <path d="M62 7 L66 3 L70 7 L66 11Z" fill="none" stroke="rgba(201,168,112,0.6)" strokeWidth="0.75" />
+              <line x1="76" y1="7" x2="120" y2="7" stroke="rgba(201,168,112,0.4)" strokeWidth="0.75" />
             </svg>
           </div>
 
@@ -293,7 +296,7 @@ export default function Hero() {
             <a href="#story" className="hero-btn-ghost">
               <span>Our Story</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/>
+                <circle cx="12" cy="12" r="10" /><path d="M12 8v4l2 2" />
               </svg>
             </a>
           </div>
@@ -301,7 +304,7 @@ export default function Hero() {
           {/* Trust signal */}
           <div className="hero-trust">
             <div className="hero-trust-avatars" aria-hidden="true">
-              {[1,2,3].map(i => (
+              {[1, 2, 3].map(i => (
                 <div key={i} className="hero-trust-avatar" style={{ '--i': i }} />
               ))}
             </div>
@@ -310,22 +313,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── STATS STRIP ── */}
-      <div className="hero-stats-strip" ref={statsRef}>
-        <div className="hero-stats-inner">
-          <div className="hero-stats-left">
-            <div className="hero-stats-eyebrow">By the Numbers</div>
-            <div className="hero-stats-rule" aria-hidden="true" />
-          </div>
-          {STATS.map((stat, i) => (
-            <React.Fragment key={stat.label}>
-              <StatItem {...stat} animate={statsVisible} />
-              {i < STATS.length - 1 && <div className="hero-stat-divider" />}
-            </React.Fragment>
-          ))}
-          <div className="hero-stats-right" />
-        </div>
-      </div>
+
 
       {/* ── SCROLL INDICATOR ── */}
       <div className="hero-scroll-indicator" aria-hidden="true">
@@ -334,6 +322,23 @@ export default function Hero() {
           <div className="hero-scroll-wheel" />
         </div>
         <span>Scroll</span>
+      </div>
+
+      {/* ── STATS STRIP ── */}
+      <div className="hero-stats-strip" ref={statsRef}>
+        <div className="hero-stats-inner">
+          <div className="hero-stats-left">
+            <span className="hero-stats-eyebrow">Our Impact</span>
+            <div className="hero-stats-rule" />
+          </div>
+          {STATS.map((stat, i) => (
+            <React.Fragment key={stat.label}>
+              {i > 0 && <div className="hero-stat-divider" aria-hidden="true" />}
+              <StatItem {...stat} animate={statsVisible} />
+            </React.Fragment>
+          ))}
+          <div className="hero-stats-right" aria-hidden="true" />
+        </div>
       </div>
     </section>
   );

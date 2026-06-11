@@ -30,14 +30,15 @@ export default function Featured() {
         </div>
 
         <div className="curated-grid">
-          {COLLECTIONS.map((c) => (
-            <Link to={c.link} key={c.id} className="curated-card">
+          {COLLECTIONS.map((c, i) => (
+            <Link to={c.link} key={c.id} className={`curated-card curated-card-${i + 1}`}>
               <div className="curated-img-wrapper">
-                <img src={c.img} alt={c.title} className="curated-img" />
+                <img src={c.img} alt={c.title} className="curated-img" loading="lazy" />
               </div>
               <div className="curated-info">
+                <span className="curated-index">0{i + 1}</span>
                 <h3>{c.title}</h3>
-                <span className="curated-link">Explore →</span>
+                <span className="curated-link">Explore Collection</span>
               </div>
             </Link>
           ))}

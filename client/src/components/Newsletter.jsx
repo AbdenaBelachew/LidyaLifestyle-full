@@ -19,18 +19,23 @@ export default function Newsletter() {
           Be the first to know about new collections, artisan stories, and exclusive offers.
         </p>
         {submitted ? (
-          <p className="newsletter-success">Thank you for subscribing!</p>
+          <p className="newsletter-success">
+            ✓ &nbsp;Thank you! You&rsquo;re now part of the Lidya community.
+          </p>
         ) : (
-          <form className="newsletter-form" onSubmit={handleSubmit}>
-            <input
-              type="email"
-              placeholder="Your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <button type="submit" className="btn btn-primary">Subscribe</button>
-          </form>
+          <>
+            <form className="newsletter-form" onSubmit={handleSubmit}>
+              <input
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button type="submit">Subscribe</button>
+            </form>
+            <p className="newsletter-trust">No spam, ever. Unsubscribe at any time.</p>
+          </>
         )}
       </div>
     </section>

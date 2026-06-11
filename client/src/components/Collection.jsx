@@ -4,10 +4,10 @@ import { getCategories } from '../api';
 import './Collection.css';
 
 const FALLBACK = [
-  { slug: 'pillows', name: 'Pillows', desc: 'Accent & lumbar cushions' },
-  { slug: 'throws-blankets', name: 'Throws & Blankets', desc: 'Cozy layered warmth' },
-  { slug: 'table-linens', name: 'Table Linens', desc: 'Runners & placemats' },
-  { slug: 'bath', name: 'Bath', desc: 'Towels & robes' },
+  { slug: 'pillows', name: 'Pillows', desc: 'Accent & lumbar cushions', icon: '◈' },
+  { slug: 'throws-blankets', name: 'Throws & Blankets', desc: 'Cozy layered warmth', icon: '◇' },
+  { slug: 'table-linens', name: 'Table Linens', desc: 'Runners & placemats', icon: '◆' },
+  { slug: 'bath', name: 'Bath', desc: 'Towels & robes', icon: '◉' },
 ];
 
 export default function Collection() {
@@ -18,10 +18,11 @@ export default function Collection() {
       .then((cats) => {
         const top = cats.filter((c) => !c.parent_id && c.slug !== 'shop-all');
         if (top.length) {
-          setCategories(top.slice(0, 4).map((c) => ({
+          setCategories(top.slice(0, 4).map((c, i) => ({
             slug: c.slug,
             name: c.name,
             desc: c.description || 'Explore the collection',
+            icon: ['◈', '◇', '◆', '◉'][i],
           })));
         }
       })
@@ -32,7 +33,7 @@ export default function Collection() {
     <section className="collection-section" id="collections">
       <div className="collection-inner fade-in">
         <div className="collection-header">
-          <span className="section-label">Collections</span>
+          <span className="section-label">Curated Collections</span>
           <h2 className="section-title">Shop by Category</h2>
         </div>
         <div className="collection-grid">
@@ -43,11 +44,13 @@ export default function Collection() {
               className="collection-card reveal-item"
               style={{ transitionDelay: `${i * 0.1}s` }}
             >
-              <div className="collection-card-bg" />
+              <div className="collection-card-bg">
+                <span className="collection-icon">{cat.icon}</span>
+              </div>
               <div className="collection-card-content">
                 <h3>{cat.name}</h3>
                 <p>{cat.desc}</p>
-                <span className="collection-link">Shop now →</span>
+                <span className="collection-link">Shop now</span>
               </div>
             </Link>
           ))}

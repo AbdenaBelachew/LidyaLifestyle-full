@@ -1,8 +1,12 @@
 import React, { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
+import TaglineBar from '../components/TaglineBar';
 import Story from '../components/Story';
+import Process from '../components/Process';
 import Featured from '../components/Featured';
+import Testimonial from '../components/Testimonial';
+import Newsletter from '../components/Newsletter';
 import Footer from '../components/Footer';
 import Seo from '../components/Seo';
 import '../App.css';
@@ -14,11 +18,15 @@ export default function HomePage() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
+            entry.target.querySelectorAll('.reveal-item').forEach((child, i) => {
+              child.style.transitionDelay = `${i * 0.08}s`;
+              child.classList.add('visible');
+            });
             fadeObserver.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
     );
 
     document.querySelectorAll('.fade-in').forEach((el) => fadeObserver.observe(el));
@@ -40,8 +48,12 @@ export default function HomePage() {
       <Navbar />
       <main>
         <Hero />
+        <TaglineBar />
         <Story />
+        <Process />
         <Featured />
+        <Testimonial />
+        <Newsletter />
       </main>
       <Footer />
     </>

@@ -19,7 +19,7 @@ export default function Shop() {
   const category = searchParams.get('category') || '';
   const page = parseInt(searchParams.get('page') || '1');
   const featured = searchParams.get('featured') || '';
-  const availability = searchParams.get('availability') || 'in-stock';
+  const availability = searchParams.get('availability') || 'all';
   const brand = searchParams.get('brand') || 'lidya-lifestyle';
 
   useEffect(() => {
@@ -28,9 +28,12 @@ export default function Shop() {
 
   useEffect(() => {
     setLoading(true);
-    const params = { page, limit: 12 };
+    const params = { page, limit: 10 };
     if (category && category !== 'all') params.category = category;
     if (featured) params.featured = featured;
+    if (availability && availability !== 'all') {
+      params.status = availability === 'in-stock' ? 'Instock' : 'preorder';
+    }
     if (searchParams.get('search')) params.search = searchParams.get('search');
 
     getProducts(params)
@@ -62,7 +65,7 @@ export default function Shop() {
 
   const setAvailability = (val) => {
     const next = new URLSearchParams(searchParams);
-    if (val !== 'in-stock') next.set('availability', val);
+    if (val !== 'all') next.set('availability', val);
     else next.delete('availability');
     next.delete('page');
     setSearchParams(next);
@@ -92,7 +95,7 @@ export default function Shop() {
     );
   };
 
-  const totalPages = Math.ceil(total / 12);
+  const totalPages = Math.ceil(total / 10);
 
   return (
     <>
@@ -157,6 +160,13 @@ export default function Shop() {
               <div className="shop-filter-section">
                 <h4 className="shop-filter-heading">Availability</h4>
                 <div className="shop-category-list">
+                  <button
+                    type="button"
+                    className={`shop-category-btn ${availability === 'all' ? 'is-active' : ''}`}
+                    onClick={() => setAvailability('all')}
+                  >
+                    All
+                  </button>
                   <button
                     type="button"
                     className={`shop-category-btn ${availability === 'in-stock' ? 'is-active' : ''}`}
@@ -250,6 +260,13 @@ export default function Shop() {
               <div className="shop-filter-section">
                 <h4 className="shop-filter-heading">Availability</h4>
                 <div className="shop-category-list">
+                  <button
+                    type="button"
+                    className={`shop-category-btn ${availability === 'all' ? 'is-active' : ''}`}
+                    onClick={() => setAvailability('all')}
+                  >
+                    All
+                  </button>
                   <button
                     type="button"
                     className={`shop-category-btn ${availability === 'in-stock' ? 'is-active' : ''}`}

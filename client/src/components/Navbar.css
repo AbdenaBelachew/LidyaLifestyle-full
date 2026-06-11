@@ -11,9 +11,35 @@
   padding: 1.1rem 0;
   background: transparent;
   transition:
-    background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Scroll progress indicator */
+.nav-scroll-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(201, 168, 112, 0.08);
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.site-nav.scrolled .nav-scroll-progress {
+  opacity: 1;
+}
+
+.nav-scroll-progress-bar {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold-light));
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
 }
 
 /* Decorative top gold line — always visible, matches footer border */
@@ -36,21 +62,21 @@
 .site-nav:not(.scrolled) {
   background: linear-gradient(
     180deg,
-    rgba(15, 5, 0, 0.92) 0%,
-    rgba(15, 5, 0, 0.5) 60%,
+    rgba(15, 5, 0, 0.88) 0%,
+    rgba(15, 5, 0, 0.45) 55%,
     transparent 100%
   );
 }
 
 /* Scrolled — matches footer's dark burgundy palette */
 .site-nav.scrolled {
-  padding: 0.7rem 0;
-  background: linear-gradient(180deg, rgba(30, 10, 5, 0.98) 0%, rgba(17, 4, 8, 0.99) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  padding: 0.65rem 0;
+  background: rgba(17, 4, 8, 0.92);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
   box-shadow:
     0 1px 0 rgba(201, 168, 112, 0.15),
-    0 4px 24px rgba(0, 0, 0, 0.4);
+    0 12px 40px rgba(0, 0, 0, 0.35);
 }
 
 /* Subtle gold glow under nav */
@@ -191,9 +217,11 @@
   text-transform: uppercase;
   color: rgba(226, 201, 154, 0.75);
   padding: 0.45rem 0.85rem;
+  border-radius: 2px;
   transition:
     color 0.3s ease,
-    transform 0.2s ease;
+    transform 0.25s ease,
+    background 0.25s ease;
   overflow: hidden;
 }
 
@@ -220,6 +248,7 @@
 .nav-links a.active {
   color: var(--gold-light);
   transform: translateY(-1px);
+  background: rgba(201, 168, 112, 0.06);
 }
 
 .site-nav.scrolled .nav-links a {
@@ -229,11 +258,7 @@
 .site-nav.scrolled .nav-links a:hover,
 .site-nav.scrolled .nav-links a.active {
   color: var(--gold-light);
-}
-
-.site-nav.scrolled .nav-links a:hover,
-.site-nav.scrolled .nav-links a.active {
-  color: var(--gold);
+  background: rgba(201, 168, 112, 0.08);
 }
 
 /* ---- Actions ---- */
@@ -416,9 +441,32 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 1.75rem;
+  padding: 1.25rem 1.5rem;
   border-bottom: 1px solid rgba(201, 168, 112, 0.12);
   flex-shrink: 0;
+}
+
+.nav-drawer-brand {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  gap: 0.15rem;
+}
+
+.nav-drawer-brand-name {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+
+.nav-drawer-brand-tagline {
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(201, 168, 112, 0.4);
 }
 
 .nav-drawer-title {
@@ -578,10 +626,6 @@
 }
 
 @media (max-width: 900px) {
-  .nav-wordmark {
-    display: none;
-  }
-
   .nav-cta-btn {
     display: none;
   }
@@ -596,6 +640,22 @@
 
   .nav-logo-img {
     height: 38px;
+  }
+
+  /* Show simplified wordmark on tablet/mobile */
+  .nav-wordmark {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .nav-name {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .nav-tagline {
+    display: none;
   }
 }
 
@@ -612,11 +672,26 @@
   .nav-hamburger span {
     width: 20px;
   }
+
+  .nav-name {
+    font-size: 0.65rem;
+  }
 }
 
 @media (max-width: 480px) {
   .nav-logo-img {
-    height: 30px;
+    height: 32px;
+  }
+
+  .nav-wordmark {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .nav-name {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
   }
 
   .nav-hamburger span {
@@ -636,5 +711,17 @@
   .nav-drawer {
     width: 100%;
     border-left: none;
+  }
+
+  .nav-drawer-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .nav-drawer-brand-name {
+    font-size: 0.85rem;
+  }
+
+  .nav-drawer-brand-tagline {
+    display: none;
   }
 }

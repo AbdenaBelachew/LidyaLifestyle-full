@@ -78,7 +78,7 @@
   font-size: 1.15rem;
   font-weight: 500;
   margin: 0 0 0.5rem;
-  color: var(--espresso, #1a0a00);
+  color: var(--text-on-light);
   line-height: 1.25;
   letter-spacing: 0.01em;
   transition: color 0.2s ease;
@@ -103,7 +103,7 @@
 
 .product-card-compare {
   font-size: 0.85rem;
-  color: rgba(45, 18, 21, 0.38);
+  color: var(--text-on-light-muted);
   text-decoration: line-through;
 }
 

@@ -8,8 +8,12 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
-  /* Offset scroll targets so fixed navbar doesn't cover content */
   scroll-padding-top: 80px;
+}
+
+::selection {
+  background: rgba(201, 168, 112, 0.35);
+  color: var(--espresso);
 }
 
 :root {
@@ -24,6 +28,9 @@ html {
   --tej-cream: #e8d5b0;
   --off-white: #faf7f2;
   --text-dark: #2d1215;
+  --text-on-light: #2a1215;
+  --text-on-light-body: #4a3228;
+  --text-on-light-muted: #6b4f42;
   --bg-card: #25181d;
 
   /* aliases used across components */
@@ -45,6 +52,7 @@ body {
   line-height: 1.6;
   color: var(--text-dark);
   background: #ffffff;
+  overflow-x: hidden;
 }
 
 img {

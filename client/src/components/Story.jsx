@@ -3,13 +3,18 @@ import './Story.css';
 
 export default function Story() {
   return (
-    <section className="story-section" id="story">
+    <section className="story-section light-section" id="story">
       <div className="story-inner fade-in">
         <div className="story-visual">
-          <div className="story-image">
-            <div className="story-image-inner" />
+          <div className="story-image story-image-primary">
+            <img src="/hero_model.png" alt="Artisan wearing traditional Ethiopian dress" loading="lazy" />
           </div>
-          <div className="story-accent" />
+          <div className="story-image story-image-secondary">
+            <img src="/hero_modelr.jpg" alt="Close-up of handwoven fabric detail" loading="lazy" />
+          </div>
+          <div className="story-accent" aria-hidden="true" />
+          <span className="story-badge">Est. 2009</span>
+          <span className="story-caption">Handwoven in Addis Ababa</span>
         </div>
         <div className="story-content">
           <span className="section-label">Our Story</span>

@@ -9,7 +9,7 @@ function slugify(text) {
 
 const EMPTY_FORM = {
   name: '', slug: '', short_description: '', description: '',
-  price: '', category_id: '', stock_qty: '', sku: '',
+  price: '', category_id: '', stock_qty: '', sku: '', status: 'Instock',
   is_featured: false, is_active: true,
 };
 
@@ -46,6 +46,11 @@ function ProductRow({ product, onEdit, onDelete }) {
           fontWeight: 600,
         }}>
           {product.stock_qty}
+        </span>
+      </td>
+      <td>
+        <span className={`admin-badge ${product.status === 'preorder' ? 'admin-badge-pending' : 'admin-badge-paid'}`}>
+          {product.status || 'Instock'}
         </span>
       </td>
       <td>
@@ -91,6 +96,7 @@ export default function Products() {
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
   const [uploading, setUploading] = useState(false);
 
   const loadProducts = useCallback(() => {
@@ -123,6 +129,7 @@ export default function Products() {
       category_id: product.category_id || '',
       stock_qty: product.stock_qty,
       sku: product.sku || '',
+      status: product.status || 'Instock',
       is_featured: !!product.is_featured,
       is_active: product.is_active !== false,
     });
@@ -147,6 +154,7 @@ export default function Products() {
       price: parseFloat(form.price),
       stock_qty: parseInt(form.stock_qty) || 0,
       category_id: form.category_id || null,
+      status: form.status || 'Instock',
     };
     try {
       if (editing) {
@@ -218,7 +226,8 @@ export default function Products() {
   const filtered = products.filter((p) => {
     const matchSearch = !search || p.name.toLowerCase().includes(search.toLowerCase()) || (p.sku || '').toLowerCase().includes(search.toLowerCase());
     const matchCategory = !filterCategory || String(p.category_id) === String(filterCategory);
-    return matchSearch && matchCategory;
+    const matchStatus = !filterStatus || p.status === filterStatus || (!p.status && filterStatus === 'Instock');
+    return matchSearch && matchCategory && matchStatus;
   });
 
   if (loading) return (
@@ -269,10 +278,29 @@ export default function Products() {
             cursor: 'pointer'
           }}
         >
-          <option value="" style={{ background: 'var(--abg)' }}>All Categories</option>
+          <option value="" style={{ background: 'var(--admin-bg)' }}>All Categories</option>
           {categories.map(c => (
-            <option key={c.id} value={c.id} style={{ background: 'var(--abg)' }}>{c.name}</option>
+            <option key={c.id} value={c.id} style={{ background: 'var(--admin-bg)' }}>{c.name}</option>
           ))}
+        </select>
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          style={{
+            padding: '0.625rem 1rem',
+            borderRadius: '20px',
+            border: '1px solid var(--admin-border)',
+            background: 'transparent',
+            color: 'var(--admin-text)',
+            fontFamily: 'inherit',
+            fontSize: '0.875rem',
+            outline: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          <option value="" style={{ background: 'var(--admin-bg)' }}>All Availability</option>
+          <option value="Instock" style={{ background: 'var(--admin-bg)' }}>In Stock</option>
+          <option value="preorder" style={{ background: 'var(--admin-bg)' }}>Pre-order</option>
         </select>
       </div>
 
@@ -283,6 +311,7 @@ export default function Products() {
               <th>Product</th>
               <th>Price</th>
               <th>Stock</th>
+              <th>Availability</th>
               <th>Featured</th>
               <th>Status</th>
               <th>Actions</th>
@@ -416,6 +445,16 @@ export default function Products() {
                       onChange={(e) => setForm((f) => ({ ...f, sku: e.target.value }))}
                       placeholder="PROD-001"
                     />
+                  </div>
+                  <div className="admin-field">
+                    <label className="admin-field-label">Availability</label>
+                    <select
+                      value={form.status}
+                      onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
+                    >
+                      <option value="Instock">In Stock</option>
+                      <option value="preorder">Pre-order</option>
+                    </select>
                   </div>
                 </div>
 

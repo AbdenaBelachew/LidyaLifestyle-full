@@ -1,6 +1,21 @@
+/* ── PROCESS / HOW IT'S MADE ─────────────────────────────────── */
 .process-section {
-  padding: 5rem 1.5rem;
-  background: #fff;
+  padding: 7rem 1.5rem;
+  background: linear-gradient(180deg, #fdfaf5 0%, #fff 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top divider line */
+.process-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201, 168, 112, 0.3), transparent);
 }
 
 .process-inner {
@@ -10,94 +25,117 @@
 
 .process-header {
   text-align: center;
-  margin-bottom: 3.5rem;
+  margin-bottom: 4rem;
+}
+
+.process-header .section-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold, #c9a870);
+  margin-bottom: 0.75rem;
+}
+
+.process-header .section-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: 400;
+  color: var(--text-on-light);
+  margin: 0;
+  line-height: 1.15;
 }
 
 .process-steps {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  gap: 0;
+  position: relative;
+}
+
+/* Horizontal connector line between steps */
+.process-steps::before {
+  content: '';
+  position: absolute;
+  top: 2.75rem;
+  left: calc(12.5% + 1.5rem);
+  right: calc(12.5% + 1.5rem);
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold, #c9a870), rgba(201, 168, 112, 0.3));
+  pointer-events: none;
+  z-index: 0;
 }
 
 .process-step {
   text-align: center;
-  padding: 2rem 1.25rem;
-  border-top: 2px solid var(--border, #e8e4df);
-  transition: border-color 0.3s;
+  padding: 0 1.5rem 0;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
 }
 
-.process-step:hover {
-  border-color: var(--brand, #c9a870);
-}
+.process-step:hover { transform: translateY(-4px); }
 
 .process-num {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid rgba(201, 168, 112, 0.3);
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 2rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  color: var(--brand, #c9a870);
-  opacity: 0.5;
-  margin-bottom: 0.75rem;
+  color: var(--gold, #c9a870);
+  margin: 0 auto 1.5rem;
+  transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+  box-shadow: 0 4px 16px rgba(201, 168, 112, 0.1);
+}
+
+.process-step:hover .process-num {
+  border-color: var(--gold, #c9a870);
+  background: linear-gradient(135deg, var(--gold, #c9a870), #b8955e);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(201, 168, 112, 0.3);
 }
 
 .process-step h3 {
-  font-size: 1.25rem;
-  margin: 0 0 0.75rem;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--text-on-light);
+  margin: 0 0 0.65rem;
+  letter-spacing: 0.01em;
 }
 
 .process-step p {
-  font-size: 0.9rem;
-  color: var(--muted, #6b6560);
-  line-height: 1.7;
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 0.88rem;
+  color: var(--text-on-light-body);
+  line-height: 1.75;
   margin: 0;
 }
 
+/* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .process-steps {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .process-section {
-    padding: 4rem 1.5rem;
-  }
+  .process-section { padding: 5rem 1.5rem; }
+  .process-steps { grid-template-columns: repeat(2, 1fr); gap: 2.5rem 1.5rem; }
+  .process-steps::before { display: none; }
 }
 
 @media (max-width: 640px) {
-  .process-steps {
-    gap: 1.5rem;
-  }
-
-  .process-step {
-    padding: 1.5rem 1rem;
-  }
-
-  .process-num {
-    font-size: 1.75rem;
-  }
-
-  .process-step h3 {
-    font-size: 1.15rem;
-  }
-
-  .process-step p {
-    font-size: 0.85rem;
-  }
+  .process-section { padding: 4rem 1.25rem; }
+  .process-header { margin-bottom: 3rem; }
+  .process-steps { gap: 2rem 1rem; }
+  .process-step { padding: 0 0.75rem; }
+  .process-num { width: 44px; height: 44px; font-size: 1.05rem; margin-bottom: 1.1rem; }
+  .process-step h3 { font-size: 1.15rem; }
 }
 
 @media (max-width: 480px) {
-  .process-steps {
-    grid-template-columns: 1fr;
-  }
-
-  .process-section {
-    padding: 3.5rem 1.25rem;
-  }
-
-  .process-header {
-    margin-bottom: 2.5rem;
-  }
-
-  .process-step {
-    padding: 1.25rem 0.85rem;
-  }
+  .process-section { padding: 3.5rem 1rem; }
+  .process-steps { grid-template-columns: 1fr; gap: 2rem; }
 }

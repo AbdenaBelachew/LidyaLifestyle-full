@@ -40,8 +40,45 @@ function NavItem({ link, pathname, hash, onNavigate }) {
   );
 }
 
+function DrawerItem({ link, pathname, hash, onNavigate, delay }) {
+  const active = isActive(link, pathname, hash);
+  const className = `nav-drawer-item ${active ? 'active' : ''}`;
+
+  if (link.hash) {
+    const href = pathname === '/' ? `#${link.hash}` : `/#${link.hash}`;
+    return (
+      <a
+        href={href}
+        className={className}
+        onClick={onNavigate}
+        style={{ '--delay': delay }}
+      >
+        {link.label}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      to={link.to}
+      className={className}
+      onClick={onNavigate}
+      style={{ '--delay': delay }}
+    >
+      {link.label}
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </Link>
+  );
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [hash, setHash] = useState(window.location.hash);
   const location = useLocation();
@@ -54,7 +91,12 @@ export default function Navbar() {
     location.pathname.startsWith('/category');
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 50);
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? Math.min(y / docHeight, 1) : 0);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener('scroll', onScroll);
@@ -82,13 +124,14 @@ export default function Navbar() {
   return (
     <>
       <nav id="navbar" className={`site-nav ${solid ? 'scrolled' : ''} ${menuOpen ? 'menu-open' : ''}`}>
-        {/* Decorative top border */}
-        <div className="nav-top-border" aria-hidden="true" />
+        <div className="nav-scroll-progress" aria-hidden="true">
+          <div className="nav-scroll-progress-bar" style={{ transform: `scaleX(${scrollProgress})` }} />
+        </div>
 
+        <div className="nav-top-border" aria-hidden="true" />
         <div className="nav-glow" aria-hidden="true" />
 
         <div className="nav-container">
-          {/* Logo */}
           <Link to="/" className="nav-brand" aria-label="Lidya Lifestyle Home">
             <div className="nav-logo-wrap">
               <img src="/logo.png" alt="Lidya Lifestyle" className="nav-logo-img" />
@@ -99,7 +142,6 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Center Nav Links */}
           <ul className="nav-links" role="list">
             {NAV_LINKS.map((link) => (
               <li key={link.label}>
@@ -113,7 +155,6 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Right Actions */}
           <div className="nav-actions">
             <CartIcon />
             <Link to="/shop" className="nav-cta-btn">
@@ -142,7 +183,10 @@ export default function Navbar() {
 
       <aside className={`nav-drawer ${menuOpen ? 'open' : ''}`} aria-hidden={!menuOpen}>
         <div className="nav-drawer-header">
-          <span className="nav-drawer-title">Menu</span>
+          <Link to="/" className="nav-drawer-brand" onClick={closeMenu}>
+            <span className="nav-drawer-brand-name">Lidya Lifestyle</span>
+            <span className="nav-drawer-brand-tagline">God is in the Details</span>
+          </Link>
           <button className="nav-drawer-close" onClick={closeMenu} aria-label="Close menu">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
               <path d="M18 6L6 18M6 6l12 12" />
@@ -152,18 +196,14 @@ export default function Navbar() {
 
         <nav className="nav-drawer-nav" role="list">
           {NAV_LINKS.map((link, i) => (
-            <Link
+            <DrawerItem
               key={link.label}
-              to={link.to || '#'}
-              className={`nav-drawer-item ${isActive(link, location.pathname, hash) ? 'active' : ''}`}
-              onClick={closeMenu}
-              style={{ '--delay': `${i * 0.06}s` }}
-            >
-              {link.label}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            </Link>
+              link={link}
+              pathname={location.pathname}
+              hash={hash}
+              onNavigate={closeMenu}
+              delay={`${i * 0.06}s`}
+            />
           ))}
           <Link to="/shop" className="nav-drawer-cta" onClick={closeMenu} style={{ '--delay': `${NAV_LINKS.length * 0.06}s` }}>
             <span>Shop Now</span>

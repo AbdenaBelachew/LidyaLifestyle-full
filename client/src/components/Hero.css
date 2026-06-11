@@ -244,7 +244,8 @@
   font-family: 'Noto Serif Ethiopic', 'Nyala', serif;
   font-size: 0.75rem;
   letter-spacing: 0.3em;
-  color: rgba(201, 168, 112, 0.22);
+  color: rgb(255, 255, 255);
+  margin-top: 1.5rem;
   white-space: nowrap;
   animation: fadeIn 1s 1.4s both;
   pointer-events: none;
@@ -271,6 +272,7 @@
   align-items: center;
   gap: 0.875rem;
   margin-bottom: 1.75rem;
+  margin-top:30px;
   animation: fadeSlideDown var(--reveal-dur) 0.1s both;
 }
 
@@ -285,6 +287,7 @@
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 0.68rem;
   font-weight: 500;
+  margin-top: 10px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: rgba(201, 168, 112, 0.8);
@@ -302,9 +305,9 @@
 /* ── SPLIT-REVEAL TITLE ── */
 .hero-title {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(3rem, 4.0vw, 5.0rem);
+  font-size: clamp(3rem, 3.0vw, 5.0rem);
   font-weight: 300;
-  line-height: 1.05;
+  line-height: 1.00;
   letter-spacing: -0.015em;
   margin: 0 0 1.5rem;
   color: #fff;
@@ -420,7 +423,7 @@
   align-items: center;
   gap: 0.65rem;
   padding: 0.98rem 2.1rem;
-  background: linear-gradient(135deg, #d4a96a 0%, #b8955e 100%);
+  background: linear-gradient(135deg, #584629 0%, #584629 100%);
   color: #fff;
   text-decoration: none;
   font-family: 'Cormorant Garamond', Georgia, serif;
@@ -429,7 +432,6 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   border-radius: 2px;
-  box-shadow: 0 4px 24px rgba(201, 168, 112, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
   transition: box-shadow 0.35s ease, gap 0.3s ease;
   overflow: hidden;
   cursor: pointer;
@@ -472,14 +474,6 @@
   z-index: 2;
 }
 
-.hero-btn-primary:hover .hero-btn-bg {
-  opacity: 1;
-}
-
-.hero-btn-primary:hover {
-  box-shadow: 0 12px 40px rgba(201, 168, 112, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  gap: 0.9rem;
-}
 
 .hero-btn-primary svg {
   transition: transform 0.3s ease;

@@ -74,7 +74,7 @@ function SwatchCard({ label, color, pos, delay }) {
 }
 
 const SWATCHES = [
-  { label: 'Habesha Crimson', color: 'linear-gradient(135deg,#8B1A1A,#C0392B)', pos: { right: '3%', top: '18%' }, delay: '1.2s' },
+  { label: 'Ethiopian Crimson', color: 'linear-gradient(135deg,#8B1A1A,#C0392B)', pos: { right: '3%', top: '18%' }, delay: '1.2s' },
   { label: 'Tilet Gold', color: 'linear-gradient(135deg,#C9A870,#E2C99A)', pos: { right: '8.5%', top: '31%' }, delay: '1.45s' },
   { label: 'Injera Linen', color: 'linear-gradient(135deg,#D4B896,#E8D5BC)', pos: { right: '2%', top: '44%' }, delay: '1.65s' },
 ];
@@ -238,21 +238,12 @@ export default function Hero() {
         <div className="hero-left-line-bottom" />
       </div>
 
-      {/* ── VERTICAL HERITAGE TAG — right edge ── */}
-      <div className="hero-heritage-tag" aria-hidden="true">
-        <span>ሊዲያ ላይፍስታይል</span>
-      </div>
 
       {/* ── MAIN CONTENT ── */}
       <div className="hero-content">
         <div className="hero-content-inner">
 
-          {/* Eyebrow */}
-          <div className="hero-eyebrow">
-            <div className="hero-eyebrow-line" />
-            <span className="hero-eyebrow-text">Ethiopian Heritage Fashion</span>
-            <div className="hero-eyebrow-dot" aria-hidden="true" />
-          </div>
+        
 
           {/* Split-reveal title */}
           <h1 className="hero-title">

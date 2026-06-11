@@ -27,6 +27,7 @@ function NavItem({ link, pathname, hash, onNavigate }) {
     return (
       <a href={href} className={className} onClick={onNavigate}>
         {link.label}
+        <span className="nav-underline" aria-hidden="true" />
       </a>
     );
   }
@@ -34,6 +35,7 @@ function NavItem({ link, pathname, hash, onNavigate }) {
   return (
     <Link to={link.to} className={className} onClick={onNavigate}>
       {link.label}
+      <span className="nav-underline" aria-hidden="true" />
     </Link>
   );
 }
@@ -80,17 +82,25 @@ export default function Navbar() {
   return (
     <>
       <nav id="navbar" className={`site-nav ${solid ? 'scrolled' : ''} ${menuOpen ? 'menu-open' : ''}`}>
+        {/* Decorative top border */}
+        <div className="nav-top-border" aria-hidden="true" />
+
         <div className="nav-glow" aria-hidden="true" />
+
         <div className="nav-container">
-          <Link to="/" className="nav-brand">
-            <img src="/logo.png" alt="Lidya Lifestyle" className="nav-logo-img" />
+          {/* Logo */}
+          <Link to="/" className="nav-brand" aria-label="Lidya Lifestyle Home">
+            <div className="nav-logo-wrap">
+              <img src="/logo.png" alt="Lidya Lifestyle" className="nav-logo-img" />
+            </div>
             <span className="nav-wordmark">
               <span className="nav-name">Lidya Lifestyle</span>
               <span className="nav-tagline">God is in the Details</span>
             </span>
           </Link>
 
-          <ul className="nav-links">
+          {/* Center Nav Links */}
+          <ul className="nav-links" role="list">
             {NAV_LINKS.map((link) => (
               <li key={link.label}>
                 <NavItem
@@ -103,8 +113,15 @@ export default function Navbar() {
             ))}
           </ul>
 
+          {/* Right Actions */}
           <div className="nav-actions">
             <CartIcon />
+            <Link to="/shop" className="nav-cta-btn">
+              <span>Shop Now</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
 
             <button
               type="button"
@@ -124,20 +141,38 @@ export default function Navbar() {
       )}
 
       <aside className={`nav-drawer ${menuOpen ? 'open' : ''}`} aria-hidden={!menuOpen}>
-        <nav className="nav-drawer-nav">
-          {NAV_LINKS.map((link) => (
-            <NavItem
+        <div className="nav-drawer-header">
+          <span className="nav-drawer-title">Menu</span>
+          <button className="nav-drawer-close" onClick={closeMenu} aria-label="Close menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <nav className="nav-drawer-nav" role="list">
+          {NAV_LINKS.map((link, i) => (
+            <Link
               key={link.label}
-              link={link}
-              pathname={location.pathname}
-              hash={hash}
-              onNavigate={closeMenu}
-            />
+              to={link.to || '#'}
+              className={`nav-drawer-item ${isActive(link, location.pathname, hash) ? 'active' : ''}`}
+              onClick={closeMenu}
+              style={{ '--delay': `${i * 0.06}s` }}
+            >
+              {link.label}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </Link>
           ))}
-          <Link to="/shop" className="nav-drawer-cta" onClick={closeMenu}>
-            Shop Now
+          <Link to="/shop" className="nav-drawer-cta" onClick={closeMenu} style={{ '--delay': `${NAV_LINKS.length * 0.06}s` }}>
+            <span>Shop Now</span>
           </Link>
         </nav>
+
+        <div className="nav-drawer-footer">
+          <span className="nav-drawer-tagline">God is in the Details</span>
+        </div>
       </aside>
     </>
   );

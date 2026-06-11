@@ -61,4 +61,40 @@
   .testimonial-grid {
     grid-template-columns: 1fr;
   }
+
+  .testimonial-section {
+    padding: 4rem 1.25rem;
+  }
+
+  .testimonial-section .section-title {
+    margin-bottom: 2.5rem;
+  }
+
+  .testimonial-card {
+    padding: 1.5rem;
+  }
+
+  .testimonial-card p {
+    font-size: 1.1rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonial-section {
+    padding: 3.5rem 1rem;
+  }
+
+  .testimonial-card {
+    padding: 1.25rem;
+  }
+
+  .testimonial-card p {
+    font-size: 1rem;
+  }
+
+  .testimonial-card cite {
+    font-size: 0.85rem;
+  }
 }

@@ -34,9 +34,10 @@ export default function CategoryPage() {
       <div className="shop-page">
         <div className="shop-container">
           <nav className="shop-breadcrumb">
-            <Link to="/shop">Shop</Link> &rsaquo; {categoryName}
+            <Link to="/">Home</Link> <span>›</span> <Link to="/shop">Shop</Link> <span>›</span> {categoryName}
           </nav>
-          <div className="shop-header">
+          <div className="category-header">
+            <span className="section-label">Collection</span>
             <h1>{categoryName}</h1>
           </div>
           <ProductGrid

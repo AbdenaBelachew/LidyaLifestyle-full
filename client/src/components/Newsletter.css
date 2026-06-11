@@ -36,8 +36,36 @@
   margin-top: 1rem;
 }
 
+@media (max-width: 640px) {
+  .newsletter-section {
+    padding: 4rem 1.25rem;
+  }
+
+  .newsletter-inner {
+    max-width: 100%;
+  }
+
+  .newsletter-form {
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 480px) {
+  .newsletter-section {
+    padding: 3.5rem 1rem;
+  }
+
   .newsletter-form {
     flex-direction: column;
+  }
+
+  .newsletter-form input {
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+  }
+
+  .newsletter-success {
+    font-size: 0.95rem;
+    margin-top: 0.85rem;
   }
 }

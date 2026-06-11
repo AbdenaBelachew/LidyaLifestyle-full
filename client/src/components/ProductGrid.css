@@ -46,11 +46,34 @@
 @media (max-width: 900px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .product-grid {
+    gap: 0.85rem;
   }
 }
 
 @media (max-width: 480px) {
   .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .product-grid-empty {
+    padding: 3rem 1rem;
+  }
+
+  .product-skeleton {
+    border-radius: 4px;
+  }
+}
+
+@media (max-width: 360px) {
+  .product-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 }

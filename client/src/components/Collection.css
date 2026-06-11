@@ -89,14 +89,51 @@
   .collection-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .collection-section {
+    padding: 4rem 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .collection-section {
+    padding: 3.5rem 1.25rem;
+  }
+
+  .collection-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .collection-card-content {
+    padding: 1.25rem;
+  }
+
+  .collection-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .collection-card p {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
 }
 
 @media (max-width: 480px) {
   .collection-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .collection-card {
     aspect-ratio: 16/9;
+  }
+
+  .collection-section {
+    padding: 3rem 1rem;
+  }
+
+  .collection-link {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

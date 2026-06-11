@@ -136,9 +136,40 @@
     max-width: 480px;
     margin: 0 auto;
   }
+  .story-section {
+    padding: 6rem 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .story-content .section-title {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+  }
+  .story-content p {
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+  .story-quote {
+    font-size: 1.15rem;
+    padding: 1.25rem 1.25rem;
+  }
+  .story-visual::before {
+    font-size: 0.6rem;
+    padding: 0.4rem 0.8rem;
+    left: -0.5rem;
+  }
 }
 
 @media (max-width: 480px) {
-  .story-section { padding: 5rem 1.25rem; }
+  .story-section { padding: 4rem 1.25rem; }
   .story-accent { display: none; }
+  .story-inner {
+    gap: 2.5rem;
+  }
+  .story-visual {
+    max-width: 100%;
+  }
+  .story-image {
+    aspect-ratio: 4/5;
+  }
 }

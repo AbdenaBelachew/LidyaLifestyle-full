@@ -133,4 +133,37 @@
   .curated-grid {
     grid-template-columns: 1fr;
   }
+  .featured-section {
+    padding: 4rem 1.25rem;
+  }
+  .curated-info {
+    padding: 1.5rem 1rem;
+  }
+  .curated-info h3 {
+    font-size: 1.5rem;
+  }
+  .featured-header {
+    margin-bottom: 2rem;
+  }
+  .featured-header[style*="margin-top"] {
+    margin-top: 3rem !important;
+  }
+  .featured-cta {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-section {
+    padding: 3rem 1rem;
+  }
+  .section-title {
+    font-size: 1.75rem;
+  }
+  .section-label {
+    font-size: 0.7rem;
+  }
+  .curated-card {
+    border-radius: 8px;
+  }
 }

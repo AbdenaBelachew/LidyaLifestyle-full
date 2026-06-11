@@ -56,10 +56,48 @@
   .process-steps {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .process-section {
+    padding: 4rem 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .process-steps {
+    gap: 1.5rem;
+  }
+
+  .process-step {
+    padding: 1.5rem 1rem;
+  }
+
+  .process-num {
+    font-size: 1.75rem;
+  }
+
+  .process-step h3 {
+    font-size: 1.15rem;
+  }
+
+  .process-step p {
+    font-size: 0.85rem;
+  }
 }
 
 @media (max-width: 480px) {
   .process-steps {
     grid-template-columns: 1fr;
+  }
+
+  .process-section {
+    padding: 3.5rem 1.25rem;
+  }
+
+  .process-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .process-step {
+    padding: 1.25rem 0.85rem;
   }
 }

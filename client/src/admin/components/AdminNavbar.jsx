@@ -1,5 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import BrandLogo from '../../components/BrandLogo';
+import { useAdminTheme } from '../context/ThemeContext';
 
 const PAGE_INFO = {
   '/admin/dashboard': {
@@ -27,34 +29,30 @@ const PAGE_INFO = {
 export default function AdminNavbar() {
   const location = useLocation();
   const pageInfo = PAGE_INFO[location.pathname] || { title: 'Admin', description: '' };
+  const { theme, toggle } = useAdminTheme();
 
   return (
     <nav className="admin-navbar">
       <div className="admin-navbar-content">
+        <div className="admin-navbar-brand">
+          <BrandLogo variant="mark" asLink={false} />
+        </div>
         <div className="admin-navbar-left">
           <h1 className="admin-navbar-title">{pageInfo.title}</h1>
           <p className="admin-navbar-subtitle">{pageInfo.description}</p>
         </div>
 
         <div className="admin-navbar-right">
-          <div className="admin-navbar-search">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.35-4.35" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search..."
-              className="admin-navbar-search-input"
-            />
-          </div>
+         
 
-          <button className="admin-navbar-btn" title="Notifications">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-            <span className="admin-navbar-badge">3</span>
+         
+
+          <button className="admin-theme-toggle" onClick={toggle} title="Toggle theme">
+            {theme === 'dark' ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+            )}
           </button>
 
           <button className="admin-navbar-btn" title="Settings">

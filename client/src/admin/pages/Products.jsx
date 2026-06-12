@@ -286,43 +286,23 @@ export default function Products() {
           />
         </div>
         <select
+          className="admin-filter-select"
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          style={{
-            padding: '0.625rem 1rem',
-            borderRadius: '20px',
-            border: '1px solid var(--aborder)',
-            background: 'transparent',
-            color: 'var(--atext)',
-            fontFamily: 'inherit',
-            fontSize: '0.875rem',
-            outline: 'none',
-            cursor: 'pointer'
-          }}
         >
-          <option value="" style={{ background: 'var(--admin-bg)' }}>All Categories</option>
+          <option value="">All Categories</option>
           {categories.map(c => (
-            <option key={c.id} value={c.id} style={{ background: 'var(--admin-bg)' }}>{c.name}</option>
+            <option key={c.id} value={c.id}>{c.name}</option>
           ))}
         </select>
         <select
+          className="admin-filter-select"
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          style={{
-            padding: '0.625rem 1rem',
-            borderRadius: '20px',
-            border: '1px solid var(--admin-border)',
-            background: 'transparent',
-            color: 'var(--admin-text)',
-            fontFamily: 'inherit',
-            fontSize: '0.875rem',
-            outline: 'none',
-            cursor: 'pointer'
-          }}
         >
-          <option value="" style={{ background: 'var(--admin-bg)' }}>All Availability</option>
-          <option value="Instock" style={{ background: 'var(--admin-bg)' }}>In Stock</option>
-          <option value="preorder" style={{ background: 'var(--admin-bg)' }}>Pre-order</option>
+          <option value="">All Availability</option>
+          <option value="Instock">In Stock</option>
+          <option value="preorder">Pre-order</option>
         </select>
       </div>
 
@@ -427,7 +407,7 @@ export default function Products() {
 
                 <div className="admin-form-row">
                   <div className="admin-field">
-                    <label className="admin-field-label">Price (USD) <span className="req">*</span></label>
+                    <label className="admin-field-label">Price (ETB) <span className="req">*</span></label>
                     <input
                       type="number" step="0.01" min="0"
                       value={form.price}

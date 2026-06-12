@@ -42,6 +42,30 @@
 }
 
 /* ============================================================
+   DARK THEME
+   ============================================================ */
+[data-admin-theme='dark'] {
+  --ap: #d4a85a;
+  --ap2: #e6c98a;
+  --ap3: #a67f3a;
+  --abg: #071026;
+  --asb: #071627;
+  --acard: #0b1220;
+  --acard2: #07101a;
+  --aborder: rgba(255,255,255,0.06);
+  --aborder2: rgba(255,255,255,0.12);
+  --atext: #e6eef8;
+  --amuted: #9aa7b7;
+  --asuccess: #22c55e;
+  --awarning: #f59e0b;
+  --aerror: #f87171;
+  --ainfo: #60a5fa;
+  --shadow: 0 6px 30px rgba(2,6,23,0.6);
+  --shadow-lg: 0 10px 48px rgba(2,6,23,0.7);
+  --glow: 0 0 20px rgba(212, 168, 90, 0.18);
+}
+
+/* ============================================================
    BASE
    ============================================================ */
 *,
@@ -350,6 +374,22 @@
   background: rgba(212, 168, 90, 0.15);
   border-color: var(--ap);
   color: var(--ap);
+}
+
+.admin-theme-toggle {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212,168,90,0.06);
+  border: 1px solid rgba(212,168,90,0.12);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.admin-theme-toggle svg {
+  display: block;
 }
 
 .admin-navbar-badge {
@@ -1429,6 +1469,11 @@
   border-color: var(--ap);
 }
 
+.admin-filter-select option {
+  background: var(--acard2);
+  color: var(--atext);
+}
+
 /* ============================================================
    TOAST
    ============================================================ */
@@ -1627,6 +1672,30 @@
     padding: 5rem 1.25rem 2rem;
   }
 
+  /* Compact navbar for narrow screens */
+  .admin-navbar {
+    padding: 0.8rem 1rem;
+  }
+
+  .admin-navbar-content {
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .admin-navbar-brand {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+  }
+
+  .admin-navbar-brand .brand-logo-img {
+    height: 28px;
+  }
+
+  .admin-navbar-search-input {
+    display: none;
+  }
+
   /* Hamburger visible */
   .admin-hamburger {
     display: flex;
@@ -1682,6 +1751,23 @@
 @media (max-width: 640px) {
   .admin-main {
     padding: 4.5rem 0.875rem 5rem;
+  }
+
+  /* Tighter navbar on mobile */
+  .admin-navbar {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .admin-navbar-title {
+    font-size: 1.125rem;
+  }
+
+  .admin-navbar-subtitle {
+    display: none;
+  }
+
+  .admin-navbar-right {
+    gap: 0.5rem;
   }
 
   /* Page title */

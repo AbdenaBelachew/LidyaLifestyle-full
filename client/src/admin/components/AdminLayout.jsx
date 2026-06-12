@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar';
 import AdminNavbar from './AdminNavbar';
 import '../admin.css';
+import { ThemeProvider } from '../context/ThemeContext';
 
 const PAGE_TITLES = {
   '/admin/dashboard': 'Dashboard',
@@ -17,7 +18,8 @@ export default function AdminLayout({ children }) {
   const title = PAGE_TITLES[location.pathname] || 'Admin';
 
   return (
-    <div className="admin-root">
+    <ThemeProvider>
+      <div className="admin-root">
       {/* Mobile hamburger */}
       <button
         type="button"
@@ -41,6 +43,7 @@ export default function AdminLayout({ children }) {
           {children}
         </div>
       </main>
-    </div>
+      </div>
+    </ThemeProvider>
   );
 }
